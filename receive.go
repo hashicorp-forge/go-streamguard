@@ -376,7 +376,7 @@ func (peer *peer) routineSequentialReceiver() {
 		if len(elem.packet) < 2 {
 			goto skip
 		}
-		length = binary.BigEndian.Uint16(elem.packet[:2])
+		length = binary.LittleEndian.Uint16(elem.packet[:2])
 		if int(length) > len(elem.packet)-2 {
 			goto skip
 		}

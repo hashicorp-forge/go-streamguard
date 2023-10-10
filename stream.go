@@ -380,7 +380,7 @@ func (s *StreamGuard) Read(p []byte) (int, error) {
 func (s *StreamGuard) Write(p []byte) (int, error) {
 	newP := make([]byte, len(p)+2, len(p)+2)
 	copy(newP[2:], p)
-	binary.BigEndian.PutUint16(newP, uint16(len(p)))
+	binary.LittleEndian.PutUint16(newP, uint16(len(p)))
 	n, err := s.stagedReadWriter.Write(newP)
 	return n - 2, err
 }
@@ -412,7 +412,7 @@ func (s *packetStream) Receive(b []byte) (int, error) {
 	if err != nil {
 		return 0, err
 	}
-	fullLength := int(binary.BigEndian.Uint32(length))
+	fullLength := int(binary.LittleEndian.Uint32(length))
 	n, err = io.ReadFull(s.innerStream, b[:fullLength])
 	if n < fullLength {
 		s.readLeftovers = make([]byte, fullLength-n, fullLength-n)
@@ -434,7 +434,7 @@ func (s *packetStream) Send(b []byte) error {
 	// wrap with length
 	buff := make([]byte, len(b)+4, len(b)+4)
 	//length := []byte{0, 0, 0, 0}
-	binary.BigEndian.PutUint32(buff, uint32(len(b)))
+	binary.LittleEndian.PutUint32(buff, uint32(len(b)))
 	copy(buff[4:], b)
 	_, err := s.innerStream.Write(buff)
 	if err != nil {
