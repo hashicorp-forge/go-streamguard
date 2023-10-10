@@ -77,9 +77,9 @@ func setZero(arr []byte) {
 	}
 }
 
-func (sk *NoisePrivateKey) clamp() {
-	sk[0] &= 248
-	sk[31] = (sk[31] & 127) | 64
+func (key *NoisePrivateKey) clamp() {
+	key[0] &= 248
+	key[31] = (key[31] & 127) | 64
 }
 
 func NewPrivateKey() (sk NoisePrivateKey, err error) {
@@ -88,16 +88,16 @@ func NewPrivateKey() (sk NoisePrivateKey, err error) {
 	return
 }
 
-func (sk *NoisePrivateKey) PublicKey() (pk NoisePublicKey) {
+func (key *NoisePrivateKey) PublicKey() (pk NoisePublicKey) {
 	apk := (*[NoisePublicKeySize]byte)(&pk)
-	ask := (*[NoisePrivateKeySize]byte)(sk)
+	ask := (*[NoisePrivateKeySize]byte)(key)
 	curve25519.ScalarBaseMult(apk, ask)
 	return
 }
 
-func (sk *NoisePrivateKey) sharedSecret(pk NoisePublicKey) (ss [NoisePublicKeySize]byte) {
+func (key *NoisePrivateKey) sharedSecret(pk NoisePublicKey) (ss [NoisePublicKeySize]byte) {
 	apk := (*[NoisePublicKeySize]byte)(&pk)
-	ask := (*[NoisePrivateKeySize]byte)(sk)
+	ask := (*[NoisePrivateKeySize]byte)(key)
 	curve25519.ScalarMult(&ss, ask, apk)
 	return ss
 }

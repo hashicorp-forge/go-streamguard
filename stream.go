@@ -415,7 +415,7 @@ func (s *packetStream) Receive(b []byte) (int, error) {
 	fullLength := int(binary.LittleEndian.Uint32(length))
 	n, err = io.ReadFull(s.innerStream, b[:fullLength])
 	if n < fullLength {
-		s.readLeftovers = make([]byte, fullLength-n, fullLength-n)
+		s.readLeftovers = make([]byte, fullLength-n)
 		_, err = io.ReadFull(s.innerStream, s.readLeftovers)
 	} else {
 		s.readLeftovers = s.readLeftovers[:0]
@@ -513,19 +513,19 @@ func WrapStreamWithKeyAndPeer(stream net.Conn, privateKey NoisePrivateKey, peer 
 	return dev, dev.up()
 }
 
-type StreamGuardListener struct {
+type Listener struct {
 	inner         net.Listener
 	peerPublicKey NoisePublicKey
 	privateKey    NoisePrivateKey
 }
 
-func (s *StreamGuardListener) PublicKey() *NoisePublicKey {
+func (s *Listener) PublicKey() *NoisePublicKey {
 	pk := s.privateKey.PublicKey()
 	pkPtr := (*[NoisePublicKeySize]byte)(&pk)
 	return (*NoisePublicKey)(pkPtr)
 }
 
-func (s *StreamGuardListener) Accept() (net.Conn, error) {
+func (s *Listener) Accept() (net.Conn, error) {
 	log.Printf("StreamGuard listener waiting on connection")
 	connection, err := s.inner.Accept()
 	if err != nil {
@@ -548,26 +548,26 @@ func (s *StreamGuardListener) Accept() (net.Conn, error) {
 	return c, nil
 }
 
-func (s *StreamGuardListener) Close() error {
+func (s *Listener) Close() error {
 	return s.inner.Close()
 }
 
-func (s *StreamGuardListener) Addr() net.Addr {
+func (s *Listener) Addr() net.Addr {
 	return s.inner.Addr()
 }
 
-func (s *StreamGuardListener) SetPeer(publicKey NoisePublicKey) {
+func (s *Listener) SetPeer(publicKey NoisePublicKey) {
 	s.peerPublicKey = publicKey
 }
 
-var _ net.Listener = (*StreamGuardListener)(nil)
+var _ net.Listener = (*Listener)(nil)
 
-func WrapListener(listener net.Listener) (*StreamGuardListener, error) {
+func WrapListener(listener net.Listener) (*Listener, error) {
 	privateKey, err := NewPrivateKey()
 	if err != nil {
 		return nil, err
 	}
-	return &StreamGuardListener{
+	return &Listener{
 		inner:      listener,
 		privateKey: privateKey,
 	}, nil

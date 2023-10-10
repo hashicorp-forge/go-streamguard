@@ -7,14 +7,13 @@
 package streamguard
 
 import (
-	"net/netip"
 	"time"
 )
 
 /* Specification constants */
 
 const (
-	rekeyAfterMessages      = (1 << 60)
+	rekeyAfterMessages      = 1 << 60
 	rejectAfterMessages     = (1 << 64) - (1 << 13) - 1
 	rekeyAfterTime          = time.Second * 120
 	rekeyTimeout            = time.Second * 5
@@ -33,5 +32,3 @@ const (
 	maxMessageSize = maxSegmentSize                        // maximum size of transport message
 	maxContentSize = maxSegmentSize - messageTransportSize // maximum size of transport message content
 )
-
-var fixedIp = netip.AddrFrom4([4]byte{10, 0, 0, 1}) // used for the rate limiter. We can only have one peer.

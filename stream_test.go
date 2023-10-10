@@ -81,7 +81,7 @@ func TestStreamWrap(t *testing.T) {
 		t.Error(err)
 	}
 	time.Sleep(1 * time.Second)
-	buff := make([]byte, 128, 128)
+	buff := make([]byte, 128)
 	n, err = clientStream.Read(buff)
 	if n != 4 || err != nil {
 		t.Errorf("Error reading from client packetStream. Read %d bytes, err %+v", n, err)
@@ -99,7 +99,7 @@ func TestStreamWrap(t *testing.T) {
 	// send a bunch of times server -> client
 	for i := 0; i < 100; i++ {
 		l := rand.Intn(1000) + 1
-		buff := make([]byte, l, l)
+		buff := make([]byte, l)
 		rand.Read(buff)
 
 		n, err = serverStream.Write(buff)
@@ -110,7 +110,7 @@ func TestStreamWrap(t *testing.T) {
 			t.Fatalf("Wrong length, got %d expected %d", n, l)
 		}
 
-		newBuff := make([]byte, 65536, 65536)
+		newBuff := make([]byte, 65536)
 		n, err = clientStream.Read(newBuff)
 		if err != nil {
 			t.Fatal(err)
@@ -125,7 +125,7 @@ func TestStreamWrap(t *testing.T) {
 	// send a bunch of times client -> server
 	for i := 0; i < 100; i++ {
 		l := rand.Intn(1000) + 1
-		buff := make([]byte, l, l)
+		buff := make([]byte, l)
 		rand.Read(buff)
 
 		n, err = clientStream.Write(buff)
@@ -136,7 +136,7 @@ func TestStreamWrap(t *testing.T) {
 			t.Fatalf("Wrong length, got %d expected %d", n, l)
 		}
 
-		newBuff := make([]byte, 65536, 65536)
+		newBuff := make([]byte, 65536)
 		n, err = serverStream.Read(newBuff)
 		if err != nil {
 			t.Fatal(err)
@@ -218,7 +218,7 @@ func TestListenerWrap(t *testing.T) {
 		t.Error(err)
 	}
 	time.Sleep(1 * time.Second)
-	buff := make([]byte, 128, 128)
+	buff := make([]byte, 128)
 	n, err = clientStream.Read(buff)
 	if n != 4 || err != nil {
 		t.Errorf("Error reading from client packetStream. Read %d bytes, err %+v", n, err)

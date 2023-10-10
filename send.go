@@ -159,20 +159,6 @@ func (peer *peer) sendHandshakeResponse() error {
 	return peer.sendBuffer(packet)
 }
 
-func (s *StreamGuard) sendHandshakeCookie(initiatingElem *queueHandshakeElement) error {
-	sender := binary.LittleEndian.Uint32(initiatingElem.packet[4:8])
-	reply, err := s.cookieChecker.createReply(initiatingElem.packet, sender, fixedIp.AsSlice())
-	if err != nil {
-		return err
-	}
-
-	var buff [messageCookieReplySize]byte
-	writer := bytes.NewBuffer(buff[:0])
-	binary.Write(writer, binary.LittleEndian, reply)
-	s.packetStream.Send(writer.Bytes())
-	return nil
-}
-
 func (peer *peer) keepKeyFreshSending() {
 	keypair := peer.keypairs.Current()
 	if keypair == nil {

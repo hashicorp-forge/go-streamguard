@@ -107,13 +107,6 @@ type messageResponse struct {
 	MAC2      [blake2s.Size128]byte
 }
 
-type messageTransport struct {
-	Type     uint32
-	Receiver uint32
-	Counter  uint64
-	Content  []byte
-}
-
 type messageCookieReply struct {
 	Type     uint32
 	Receiver uint32

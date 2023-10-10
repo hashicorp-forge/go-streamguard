@@ -8,7 +8,7 @@ import (
 	"net"
 	"time"
 
-	streamguard "github.com/hashicorp/go-streamguard"
+	"github.com/hashicorp/go-streamguard"
 )
 
 func server(incomingKey chan streamguard.NoisePublicKey, outgoingKey chan streamguard.NoisePublicKey, port int) {
