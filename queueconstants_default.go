@@ -6,7 +6,7 @@
  * Copyright (C) 2023 HashiCorp Inc.
  */
 
-package lite
+package streamguard
 
 const (
 	queueStagedSize            = 128

@@ -4,7 +4,7 @@
  * Copyright (C) 2023 HashiCorp Inc.
  */
 
-package lite
+package streamguard
 
 import (
 	"crypto/cipher"

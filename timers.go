@@ -6,7 +6,7 @@
  * This is based heavily on timers.c from the kernel implementation.
  */
 
-package lite
+package streamguard
 
 import (
 	"log"
