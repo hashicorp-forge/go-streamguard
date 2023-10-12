@@ -9,6 +9,8 @@ This package makes one slight modification to the WireGuard protocol: before eac
 
 This code was originally forked from [Wireguard/wireguard-go](https://github.com/WireGuard/wireguard-go).
 
+Note that this package is experimental, and not suitable for production use.
+
 ## TODO
 
 * Benchmarking
